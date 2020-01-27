@@ -45,15 +45,56 @@
               Please enter your criticisms and suggestions below. <br />
             Convey in a polite manner.</p>
             <div class="input-group input-group-newsletter">
-              
-              <textarea class="form-control" rows="6" cols="50" placeholder="Your text here..." aria-label="Your text here..." aria-describedby="basic-addon"></textarea>
+            <form method="post" action="index.php">
+              <textarea name="komen" class="form-control" rows="6" cols="50" placeholder="Your text here..." aria-label="Your text here..." aria-describedby="basic-addon"></textarea>
             </div>
             <br>
             
               <div class="input-group-append">
                 <button class="btn btn-secondary" type="submit" value="Submit" name="submit">Submit</button>
               </div>
+            </form>
+            <?php
+              if(isset($_POST['submit']))
+              {
+                $params = array(
+                  "saran" => $_POST['komen']
+                );
 
+                httpPost("http://ruangtunggu.id/jacob/index.php/Saran/saran",$params);
+
+                alert("Saran Berhasil Dikirim");
+              } 
+
+              function httpPost($url,$params)
+              {
+                $postData = '';
+                //create name value pairs seperated by &
+                foreach($params as $k => $v) 
+                { 
+                    $postData .= $k . '='.$v.'&'; 
+                }
+                $postData = rtrim($postData, '&');
+              
+                  $ch = curl_init();  
+              
+                  curl_setopt($ch,CURLOPT_URL,$url);
+                  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+                  curl_setopt($ch,CURLOPT_HEADER, false); 
+                  // curl_setopt($ch, CURLOPT_POST, count($postData));
+                      curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);    
+              
+                  $output=curl_exec($ch);
+              
+                  curl_close($ch);
+                  // return $output;
+              }
+
+              function alert($msg) {
+                echo "<script type='text/javascript'>alert('$msg');</script>";
+            }
+              
+            ?>
             
           </div>
         </div>
